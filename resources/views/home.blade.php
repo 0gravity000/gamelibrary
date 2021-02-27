@@ -17,6 +17,12 @@
                     {{ __('You are logged in!') }}
                 </div>
             </div>
+            <a href="/root">Get Started!</a><br>
+            @auth
+                @if(Auth::user()->name == "0gravity")
+                    <a href="/admin">管理者メニュー</a><br>
+                @endif
+            @endauth
         </div>
     </div>
 </div>
