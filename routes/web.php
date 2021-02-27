@@ -20,4 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/root', 'GameController@index');
+Route::get('/root', function () {
+    return view('root');
+});
+Route::post('/game', 'GameController@index');
+Route::get('/game/{serachgamename}/{videoid}', 'GameController@show');
