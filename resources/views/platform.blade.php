@@ -4,13 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <p>管理者メニュー</p>
             <a href="/admin">管理者メニュー</a> > 
-            <a href="/admin/create">ゲームタイトルから別名を登録</a><br>
+            <a href="/admin/platform">プラットフォームを編集</a><br>
             <hr>
+            <a href="/admin/platform/0">新規作成</a>
             <div>
-                @foreach($games as $game)
-                <a href="/admin/game/{{ $game->id }}">{{ $game->id }}：{{ $game->title_original }}</a><br>
+                @foreach($platforms as $platform)
+                <a href="/admin/platform/{{ $platform->id }}">{{ $platform->id }}：{{ $platform->name }}</a><br>
                 @endforeach
             </div>
     </div>

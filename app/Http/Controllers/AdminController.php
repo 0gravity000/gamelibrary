@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Goutte\Client;
+use App\Game;
+use App\Platform;
+use App\GametitleAliase;
 
 class AdminController extends Controller
 {
@@ -44,9 +47,43 @@ class AdminController extends Controller
             });
             */
             //dd($title_lists[$index]);
+            foreach ($title_lists[$index] as $title) {
+                if (Game::where('title_original', $title)->doesntExist()) {
+                    $game = new Game;
+                    $game->title_original = $title;
+                    switch ($index) {
+                        case 0:
+                        case 1:
+                            //PlayStation 5
+                            $game->platform_id = Platform::where('name', "PlayStation 5")->first()->id; 
+                            break;
+                        case 2:
+                        case 3:
+                            //PlayStation 4
+                            $game->platform_id = Platform::where('name', "PlayStation 4")->first()->id; 
+                            break;
+                        case 4:
+                        case 5:
+                             //Nintendo Switch
+                             $game->platform_id = Platform::where('name', "Nintendo Switch")->first()->id; 
+                             break;
+                        default:
+                            $game->platform_id = '';
+                            break;
+                    }
+                    //dd($game);
+                    $game->save();
+                }
+            }
         }
         //dd($ordered_lists);
-        return view('gametitle', compact('title_lists'));
+        return redirect('/admin');
+    }
+
+    public function platform()
+    {
+        $platforms = Platform::all();
+        return view('platform', compact('platforms'));
     }
 
     /**
@@ -67,6 +104,8 @@ class AdminController extends Controller
     public function create()
     {
         //
+        $games = Game::all();
+        return view('gametitle', compact('games'));
     }
 
     /**
@@ -86,9 +125,33 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show_platform($id)
     {
         //
+        if ($id== 0) {
+            $platform = new Platform;
+            $platform->name = rand();
+            $platform->save();
+
+            $platform = Platform::orderBy('id', 'desc')->first();
+            $platform->name = "new platform" . $platform->id;
+            $platform->save();
+            //dd($platform);
+        } else{
+            $platform = Platform::where('id', $id)->first();
+            //dd($platform);
+        }
+ 
+        return view('platform_update', compact('platform'));
+    }
+
+    public function show_game($id)
+    {
+        //
+        $game = Game::where('id', $id)->first();
+        //dd($platform);
+ 
+        return view('game_update', compact('game'));
     }
 
     /**
@@ -97,7 +160,7 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
         //
     }
@@ -109,9 +172,26 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update_platform(Request $request)
     {
         //
+        $platform = Platform::where('id', $request->InputId)->first();
+        $platform->name = $request->InputName;
+        $platform->save();
+
+        return redirect('/admin/platform');
+    }
+
+    public function update_game(Request $request)
+    {
+        //
+        //dd($request);
+        $gametitlealiase = new GametitleAliase;
+        $gametitlealiase->title = $request->InputTitle;
+        $gametitlealiase->game_id = $request->InputId;
+        $gametitlealiase->save();
+
+        return redirect('/admin/create');
     }
 
     /**

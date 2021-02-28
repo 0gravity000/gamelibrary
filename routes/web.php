@@ -29,3 +29,9 @@ Route::get('/admin', function () {
     return view('admin');
 });
 Route::get('/admin/download', 'AdminController@download');
+Route::get('/admin/platform', 'AdminController@platform');
+Route::get('/admin/platform/{id}', 'AdminController@show_platform');
+Route::post('/admin/platform', 'AdminController@update_platform');
+Route::get('/admin/create', 'AdminController@create');
+Route::get('/admin/game/{id}', 'AdminController@show_game');
+Route::post('/admin/game', 'AdminController@update_game');
