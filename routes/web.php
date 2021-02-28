@@ -25,3 +25,7 @@ Route::get('/root', function () {
 });
 Route::post('/game', 'GameController@index');
 Route::get('/game/{serachgamename}/{videoid}', 'GameController@show');
+Route::get('/admin', function () {
+    return view('admin');
+});
+Route::get('/admin/download', 'AdminController@download');

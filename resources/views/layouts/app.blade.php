@@ -65,8 +65,13 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
+    
+                                    @if(Auth::user()->name == "0gravity")
+                                        <a class="dropdown-item" href="/admin">管理者メニュー</a>
+                                    @endif
+    
                                 </div>
-                            </li>
+                        </li>
                         @endguest
                     </ul>
                 </div>
