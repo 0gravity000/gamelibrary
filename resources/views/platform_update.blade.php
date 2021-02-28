@@ -11,7 +11,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="InputId" class="form-label">id</label>
-                    <input type="text" name="InputId" value="{{ $platform->id }}"  disabled><br>
+                    <input type="text" name="InputId" value="{{ $platform->id }}"><br>
                     <label for="InputName" class="form-label">プラットフォーム名</label>
                     <input type="text" name="InputName" value="{{ $platform->name }}"><br>
                 </div>
