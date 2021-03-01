@@ -21,7 +21,7 @@
             }
 
             .full-height {
-                height: 100vh;
+                height: 10vh;
             }
 
             .flex-center {
@@ -78,13 +78,17 @@
                     @endauth
                 </div>
             @endif
+        </div>
 
-            <div class="content">
+        <div class="content">
+            <div class="row">
                 <div class="title m-b-md">
                     <a href="/root">GameLibrary</a>
                 </div>
                 <p><a href="/root">人気ゲームの動画をチェック！！</a></p>
-                <div>
+            </div>
+                <div class="row">
+                    <div>
                     @foreach($gameitems[0] as $item)
                     <img class="mr-3" src="{{ $item->snippet->thumbnails->medium->url }}" alt="Generic placeholder image">
                     @endforeach
@@ -95,8 +99,8 @@
                     <img class="mr-3" src="{{ $item->snippet->thumbnails->medium->url }}" alt="Generic placeholder image">
                     @endforeach
                 </div>
-
             </div>
         </div>
+
     </body>
 </html>
