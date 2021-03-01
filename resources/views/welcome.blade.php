@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gamelibrary</title>
+        <title>GameLibrary</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
@@ -81,12 +81,21 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    GameLibrary
+                    <a href="/root">GameLibrary</a>
+                </div>
+                <p><a href="/root">人気ゲームの動画をチェック！！</a></p>
+                <div>
+                    @foreach($gameitems[0] as $item)
+                    <img class="mr-3" src="{{ $item->snippet->thumbnails->medium->url }}" alt="Generic placeholder image">
+                    @endforeach
+                    @foreach($gameitems[1] as $item)
+                    <img class="mr-3" src="{{ $item->snippet->thumbnails->medium->url }}" alt="Generic placeholder image">
+                    @endforeach
+                    @foreach($gameitems[2] as $item)
+                    <img class="mr-3" src="{{ $item->snippet->thumbnails->medium->url }}" alt="Generic placeholder image">
+                    @endforeach
                 </div>
 
-                <div class="links">
-                    <a href="/root">Get Started!</a>
-                </div>
             </div>
         </div>
     </body>

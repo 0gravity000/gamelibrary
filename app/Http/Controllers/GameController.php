@@ -5,9 +5,51 @@ namespace App\Http\Controllers;
 use App\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\GametitleAliase;
 
 class GameController extends Controller
 {
+    public function random()
+    {
+        $count = 3;
+        $gametitlealiases = GametitleAliase::inRandomOrder()->take($count)->get();
+
+        $apikey = Storage::disk('local')->get('/keys/youtubeapi');
+        $idx = 0;
+        $gameitems = [$count];
+
+        foreach ($gametitlealiases as $gametitlealiase) {
+            //タイトルにスペースを含むとレスポンスにがNullになるので + に置換する
+            $title = str_replace(array(" ", "  ", "　"), '+', $gametitlealiase->title);	//改行コード削除が必要？
+
+            $request_url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoCategoryId=20&maxResults=10&q='.$title.'&key='.$apikey;
+            //dd($request_url);
+            $context = stream_context_create(array(
+              'http' => array('ignore_errors' => true)
+             ));
+            $res = file_get_contents($request_url, false, $context);
+            //dd($res);
+            $respons = json_decode($res, false) ;
+            //dd($respons);
+            $tmpgameitems = $respons->items;    //配列が返る
+            //dd($tmpgameitems);
+            //dd($tmpgameitems[$idx]);
+            $arrays = array_rand($tmpgameitems, 2);
+            //dd($arrays);
+            $arrayidx = 0;
+            for ($arrayidx=0; $arrayidx < count($arrays); $arrayidx++) { 
+                $items[$arrayidx] = $tmpgameitems[$arrays[$arrayidx]] ;
+            }
+            $gameitems[$idx] = $items;
+            //$gameitems = $tmpgameitems->random(1)->all();
+            //$gameitems = $tmpgameitems[$idx]->random(1)->all();
+            //dd($gameitems);
+            $idx++;
+        }
+        //dd($gameitems);
+        return view('welcome', compact('gameitems'));
+    }
+
     /**
      * Display a listing of the resource.
      *

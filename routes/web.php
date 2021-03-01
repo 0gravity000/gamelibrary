@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', 'GameController@random');
+/*
 Route::get('/', function () {
     return view('welcome');
 });
+*/
 
 Auth::routes();
 
