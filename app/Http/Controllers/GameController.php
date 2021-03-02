@@ -40,27 +40,36 @@ class GameController extends Controller
                 $res = file_get_contents($request_url, false, $context);
                 //dd($res);
                 $respons = json_decode($res, false) ;
-                //dd($respons);
+                //dd($respons, $this->apikeys[$apiidx]);
                 if (array_key_exists('error', $respons)) {
+                    //dd($respons, $this->apikeys[$apiidx]);
                     //エラー 次のapi keyループ
                     /*
+                    +"error": {#299 ▼
+                        +"code": 403
+                        +"message": "The request cannot be completed because you have exceeded your <a href="/youtube/v3/getting-started#quota">quota</a>."
+                        +"errors": array:1 [▶]
+                    }
                     +"error": {#299 ▼
                         +"code": 400
                         +"message": "API key not valid. Please pass a valid API key."
                         +"errors": array:1 [▶]
                         +"status": "INVALID_ARGUMENT"
                     }
-                    }
                     */
                 } else {
+                    //dd($respons, $this->apikeys[$apiidx]);
                     break;
                 }
             }
             
+            //dd($respons, $this->apikeys[$apiidx]);
             if (array_key_exists('items', $respons)) {
             } else {
                 //全api keyで検索してもエラー
-                exit;
+                $message="Sorry. Request exceeded limit. Please request tomorrow";
+                //dd($respons);
+                return view('welcome', compact('message'));
             }
             $tmpgameitems = $respons->items;    //配列が返る
             //dd($tmpgameitems);
@@ -78,7 +87,8 @@ class GameController extends Controller
             $idx++;
         }
         //dd($gameitems);
-        return view('root', compact('gameitems','titles'));
+        $gametitlealiases = GametitleAliase::all();
+        return view('root', compact('gameitems','titles','gametitlealiases'));
     }
 
     /**
