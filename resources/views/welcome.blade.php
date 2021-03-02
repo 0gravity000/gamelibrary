@@ -87,20 +87,6 @@
                 </div>
                 <p><a href="/root">人気ゲームの動画をチェック！！</a></p>
             </div>
-                <div class="row">
-                    <div>
-                    @foreach($gameitems[0] as $item)
-                    <img class="mr-3" src="{{ $item->snippet->thumbnails->medium->url }}" alt="Generic placeholder image">
-                    @endforeach
-                    @foreach($gameitems[1] as $item)
-                    <img class="mr-3" src="{{ $item->snippet->thumbnails->medium->url }}" alt="Generic placeholder image">
-                    @endforeach
-                    @foreach($gameitems[2] as $item)
-                    <img class="mr-3" src="{{ $item->snippet->thumbnails->medium->url }}" alt="Generic placeholder image">
-                    @endforeach
-                </div>
-            </div>
         </div>
-
     </body>
 </html>

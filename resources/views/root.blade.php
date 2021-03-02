@@ -1,10 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="content">
+    <div class="row justify-content-center">
+        <h1>ピックアップ！</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for ($i = 0; $i < count($gameitems); $i++)
+                @foreach($gameitems[$i] as $item)
+                <a href="/game/{{ $titles[$i] }}/{{ $item->id->videoId }}">
+                    <img src="{{ $item->snippet->thumbnails->medium->url }}" class="d-block w-100" alt="...">
+                </a>
+                @endforeach
+                @endfor
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <a href="/game">ゲームを取得</a>
             <form method="POST" action="/game">
                 @csrf
                 <div class="mb-3">
