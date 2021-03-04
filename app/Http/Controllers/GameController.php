@@ -94,16 +94,16 @@ class GameController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  $serachgamename
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index($serachgamename)
     {
         //
         //dd($request->InputGameName1);
         //$game = Game::where('title', $title)->first();
         //タイトルにスペースを含むとレスポンスにがNullになるので + に置換する
-        $title = str_replace(array(" ", "  ", "　"), '+', $request->InputGameName1);	//改行コード削除が必要？
+        $title = str_replace(array(" ", "  ", "　"), '+', $serachgamename);	//改行コード削除が必要？
         //api keyループ
         for ($apiidx=0; $apiidx < count($this->apikeys); $apiidx++) { 
             //Search: list
@@ -129,7 +129,6 @@ class GameController extends Controller
         }
         $gameitems = $respons->items;
         //dd($gameitems);
-        $serachgamename = $request->InputGameName1;
         //dd($serachgamename);
         return view('gamelist', compact('gameitems', 'serachgamename'));
     }
