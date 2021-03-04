@@ -38,3 +38,6 @@ Route::post('/admin/platform', 'AdminController@update_platform');
 Route::get('/admin/create', 'AdminController@create');
 Route::get('/admin/game/{id}', 'AdminController@show_game');
 Route::post('/admin/game', 'AdminController@update_game');
+Route::get('/admin/edit', 'AdminController@edit');
+Route::get('/admin/gamealias/{id}', 'AdminController@show_gamealias');
+Route::post('/admin/gamealias', 'AdminController@update_gamealias');

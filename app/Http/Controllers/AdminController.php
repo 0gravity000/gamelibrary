@@ -153,6 +153,14 @@ class AdminController extends Controller
  
         return view('game_update', compact('game'));
     }
+    public function show_gamealias($id)
+    {
+        //
+        $gametitlealiase = GametitleAliase::where('id', $id)->first();
+        //dd($gametitlealiase);
+ 
+        return view('gamealias_update', compact('gametitlealiase'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -163,6 +171,10 @@ class AdminController extends Controller
     public function edit()
     {
         //
+        //
+        $gametitlealiases = GametitleAliase::all();
+        //dd($gametitlealiases);
+        return view('gametitlealias', compact('gametitlealiases'));
     }
 
     /**
@@ -192,6 +204,16 @@ class AdminController extends Controller
         $gametitlealiase->save();
 
         return redirect('/admin/create');
+    }
+    public function update_gamealias(Request $request)
+    {
+        //
+        $gametitlealiase = GametitleAliase::where('id', $request->InputId)->first();
+        //dd($gametitlealiase);
+        $gametitlealiase->title = $request->InputTitle;
+        $gametitlealiase->save();
+
+        return redirect('/admin/edit');
     }
 
     /**
