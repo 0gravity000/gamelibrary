@@ -4,13 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form method="POST" action="/game">
-                @csrf
-                <div class="mb-3">
-                    <input type="hidden" name="InputGameName1" value={{ $serachgamename }}>
-                </div>
-                <button type="submit" class="btn btn-primary">一覧へ戻る</button>
-            </form>
+            <a href="/game/{{ $serachgamename }}">一覧へ戻る</a>
 
             @foreach($videoitems as $item)
             <div>

@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <a href="/root">戻る</a>
+            <a href="/root">トップ画面へ戻る</a>
 
             @foreach($gameitems as $item)
             <div class="media">
