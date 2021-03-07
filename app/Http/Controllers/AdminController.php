@@ -198,6 +198,11 @@ class AdminController extends Controller
     {
         //
         //dd($request);
+        //バリデーションチェック
+        $validatedData = $request->validate([
+            'InputTitle' => ['unique:gametitle_aliases,title']
+        ]);
+
         $gametitlealiase = new GametitleAliase;
         $gametitlealiase->title = $request->InputTitle;
         $gametitlealiase->game_id = $request->InputId;

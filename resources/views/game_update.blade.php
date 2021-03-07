@@ -5,8 +5,18 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <a href="/admin">管理者メニュー</a> > 
-            <a href="/admin/game">ゲームタイトルを編集</a><br>
+            <a href="/admin/create">ゲームタイトルから別名を登録</a><br>
             <hr>
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+        
             <form method="POST" action="/admin/game">
                 @csrf
                 <div class="mb-3">
