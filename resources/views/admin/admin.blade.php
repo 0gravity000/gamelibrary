@@ -10,6 +10,8 @@
             <a href="/admin/create">ゲームタイトルから別名を登録</a><br>
             <a href="/admin/edit">ゲームタイトルの別名を編集</a><br>
             <a href="/admin/platform">プラットフォームを登録</a><br>
+            <br>
+            <a href="/admin/request">Google Youtube APIのリクエストを登録・編集</a>
         </div>
     </div>
 </div>

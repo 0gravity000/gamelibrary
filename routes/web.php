@@ -29,7 +29,7 @@ Route::get('/root', function () {
 Route::get('/game/{serachgamename}', 'GameController@index');
 Route::get('/game/{serachgamename}/{videoid}', 'GameController@show');
 Route::get('/admin', function () {
-    return view('admin');
+    return view('admin.admin');
 });
 Route::get('/admin/download', 'AdminController@download');
 Route::get('/admin/platform', 'AdminController@platform');
@@ -41,3 +41,9 @@ Route::post('/admin/game', 'AdminController@update_game');
 Route::get('/admin/edit', 'AdminController@edit');
 Route::get('/admin/gamealias/{id}', 'AdminController@show_gamealias');
 Route::post('/admin/gamealias', 'AdminController@update_gamealias');
+
+Route::get('/admin/request','ApiController@index_request');
+Route::get('/admin/request/create', function () {
+    return view('admin.api_create');
+});
+Route::post('/admin/request/store','ApiController@store_request');

@@ -129,6 +129,7 @@ class GameController extends Controller
             exit;
         }
 
+        dd($respons);
         $kind = $respons->kind;
         try {
             $nextPageToken = $respons->nextPageToken;
