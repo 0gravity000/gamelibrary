@@ -74,7 +74,9 @@ class GameController extends Controller
         if (array_key_exists('items', $respons)) {
         } else {
             //全api keyで検索してもエラー
-            exit;
+            $message="Sorry. Request exceeded limit. Please request tomorrow";
+            //dd($respons);
+            return view('welcome', compact('message'));
         }
 
         //searchlistテーブルに登録
