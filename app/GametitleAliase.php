@@ -11,4 +11,9 @@ class GametitleAliase extends Model
     {
         return $this->belongsTo('App\Game');
     }
+
+    public function seachlists()
+    {
+        return $this->hasMany('App\Seachlist');
+    }
 }

@@ -19,19 +19,20 @@
     </div>
     <div class="col-md-8">
         <h1>ピックアップ！</h1>
-                @for ($i = 0; $i < count($gameitems); $i++)
-                @foreach($gameitems[$i] as $item)
-                <div class="card" style="width: 28rem;">
-                    <a href="/game/{{ $titles[$i] }}/{{ $item->id->videoId }}">
-                        <img src="{{ $item->snippet->thumbnails->medium->url }}" class="d-block w-100" alt="...">
-                    </a>
-                    <div class="card-body">
-                    <h5 class="card-title">{!! html_entity_decode($item->snippet->title) !!}</h5>
-                    <p class="card-text">{!! html_entity_decode($item->snippet->description) !!}</p>
-                    </div>
-               </div>
-                @endforeach
-                @endfor
+            @foreach ($searchlists as $searchlist)
+            <div class="card" style="width: 28rem;">
+                <h5 class="card-header">
+                    {!! html_entity_decode($searchlist->gametitle_aliase->title) !!}
+                </h5>
+                <a href="/game/{{ $searchlist->gametitle_aliase->title }}/{{ $searchlist->videoid }}">
+                    <img src="{{ $searchlist->thumbnails_mediumurl }}" class="d-block w-100" alt="...">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">{!! html_entity_decode($searchlist->title) !!}</h5>
+                    <p class="card-text">{!! html_entity_decode($searchlist->description) !!}</p>
+                </div>
+           </div>
+            @endforeach
     </div>
     </div>
 </div>

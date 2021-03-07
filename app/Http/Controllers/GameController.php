@@ -6,7 +6,8 @@ use App\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\GametitleAliase;
-
+use App\ApiRequest;
+use App\Searchlist;
 class GameController extends Controller
 {
     private $apikeys;
@@ -19,76 +20,11 @@ class GameController extends Controller
 
     public function random()
     {
-        $count = 3;
-        $gametitlealiases = GametitleAliase::inRandomOrder()->take($count)->get();
-
-        //dd($this->apikeys);
-        //$apikey = Storage::disk('local')->get('/keys/youtubeapi');
-        $idx = 0;
-        $gameitems = [$count];
-        $titles = [$count];
-        foreach ($gametitlealiases as $gametitlealiase) {
-            //タイトルにスペースを含むとレスポンスにがNullになるので + に置換する
-            $titles[$idx] = str_replace(array(" ", "  ", "　"), '+', $gametitlealiase->title);	//改行コード削除が必要？
-            //api keyループ
-            for ($apiidx=0; $apiidx < count($this->apikeys); $apiidx++) { 
-                $request_url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&order=rating&type=video&videoCategoryId=20&maxResults=10&q='.$titles[$idx].'&key='.$this->apikeys[$apiidx];
-                //dd($request_url);
-                $context = stream_context_create(array(
-                  'http' => array('ignore_errors' => true)
-                 ));
-                $res = file_get_contents($request_url, false, $context);
-                //dd($res);
-                $respons = json_decode($res, false) ;
-                //dd($respons, $this->apikeys[$apiidx]);
-                if (array_key_exists('error', $respons)) {
-                    //dd($respons, $this->apikeys[$apiidx]);
-                    //エラー 次のapi keyループ
-                    /*
-                    +"error": {#299 ▼
-                        +"code": 403
-                        +"message": "The request cannot be completed because you have exceeded your <a href="/youtube/v3/getting-started#quota">quota</a>."
-                        +"errors": array:1 [▶]
-                    }
-                    +"error": {#299 ▼
-                        +"code": 400
-                        +"message": "API key not valid. Please pass a valid API key."
-                        +"errors": array:1 [▶]
-                        +"status": "INVALID_ARGUMENT"
-                    }
-                    */
-                } else {
-                    //dd($respons, $this->apikeys[$apiidx]);
-                    break;
-                }
-            }
-            
-            //dd($respons, $this->apikeys[$apiidx]);
-            if (array_key_exists('items', $respons)) {
-            } else {
-                //全api keyで検索してもエラー
-                $message="Sorry. Request exceeded limit. Please request tomorrow";
-                //dd($respons);
-                return view('welcome', compact('message'));
-            }
-            $tmpgameitems = $respons->items;    //配列が返る
-            //dd($tmpgameitems);
-
-            $arrays = array_rand($tmpgameitems, 2);
-            //dd($arrays);
-            $arrayidx = 0;
-            for ($arrayidx=0; $arrayidx < count($arrays); $arrayidx++) { 
-                $items[$arrayidx] = $tmpgameitems[$arrays[$arrayidx]] ;
-            }
-            $gameitems[$idx] = $items;
-            //$gameitems = $tmpgameitems->random(1)->all();
-            //$gameitems = $tmpgameitems[$idx]->random(1)->all();
-            //dd($gameitems);
-            $idx++;
-        }
-        //dd($gameitems);
+        $count = 10;
+        $searchlists = Searchlist::inRandomOrder()->take($count)->get();
         $gametitlealiases = GametitleAliase::all();
-        return view('root', compact('gameitems','titles','gametitlealiases'));
+
+        return view('root', compact('searchlists', 'gametitlealiases'));
     }
 
     /**
@@ -104,10 +40,22 @@ class GameController extends Controller
         //$game = Game::where('title', $title)->first();
         //タイトルにスペースを含むとレスポンスにがNullになるので + に置換する
         $title = str_replace(array(" ", "  ", "　"), '+', $serachgamename);	//改行コード削除が必要？
+        $apirequest = ApiRequest::where('id', 1)->first();
+        
         //api keyループ
         for ($apiidx=0; $apiidx < count($this->apikeys); $apiidx++) { 
             //Search: list
+            $request_url = $apirequest->url.
+                '?part='.$apirequest->part.
+                '&order='.$apirequest->order.
+                '&type='.$apirequest->type.
+                '&videoCategoryId='.$apirequest->videocategoryid.
+                '&maxResults='.$apirequest->maxresults.
+                '&q='.$title.
+                '&key='.$this->apikeys[$apiidx];
+            /*
             $request_url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&order=rating&type=video&videoCategoryId=20&maxResults=50&q='.$title.'&key='.$this->apikeys[$apiidx];
+             */
             //dd($request_url);
             $context = stream_context_create(array(
             'http' => array('ignore_errors' => true)
@@ -129,22 +77,50 @@ class GameController extends Controller
             exit;
         }
 
-        dd($respons);
-        $kind = $respons->kind;
-        try {
-            $nextPageToken = $respons->nextPageToken;
-        } catch (\Exception $e) {
-            $nextPageToken = '';
-        }
-        try {
-            $prevPageToken = $respons->prevPageToken;
-        } catch (\Exception $e) {
-            $prevPageToken = '';
-        }
+        //searchlistテーブルに登録
+        //dd($respons);
         $gameitems = $respons->items;
-        //dd($gameitems);
-        //dd($serachgamename);
-        return view('gamelist', compact('gameitems', 'serachgamename'));
+        $gametitlealias = GametitleAliase::where('title', $serachgamename)->first();
+        foreach ($gameitems as $gameitem) {
+            if (Searchlist::where('gametitle_aliase_id', $gametitlealias->id)
+                ->where('videoid', $gameitem->id->videoId)->exists()) {
+                $searchlist = Searchlist::where('gametitle_aliase_id', $gametitlealias->id)
+                ->where('videoid', $gameitem->id->videoId)->first();
+                //dd($searchlist);
+            } else {
+                //新規追加
+                $searchlist = new Searchlist;
+            }
+
+            $searchlist->videoid = $gameitem->id->videoId;
+            $searchlist->channelid = $gameitem->snippet->channelId;
+            $searchlist->channeltitle = $gameitem->snippet->channelTitle;
+            $searchlist->title = $gameitem->snippet->title;
+            $searchlist->description = $gameitem->snippet->description;
+            $searchlist->thumbnails_defaulturl = $gameitem->snippet->thumbnails->default->url;
+            $searchlist->thumbnails_mediumurl = $gameitem->snippet->thumbnails->medium->url;
+            $searchlist->thumbnails_highurl = $gameitem->snippet->thumbnails->high->url;
+            $searchlist->description = $gameitem->snippet->description;
+            $searchlist->publishtime = $gameitem->snippet->publishTime;
+            $searchlist->api_request_id = $apirequest->id;
+            $searchlist->kind = $respons->kind;
+            try {
+                $searchlist->nextpagetoken = $respons->nextPageToken;
+            } catch (\Exception $e) {
+                $searchlist->nextpagetoken = '';
+            }
+            try {
+                $searchlist->prevpagetoken = $respons->prevPageToken;
+            } catch (\Exception $e) {
+                $searchlist->prevpagetoken = '';
+            }
+            $searchlist->gametitle_aliase_id = $gametitlealias->id;
+            $searchlist->save();
+        }
+
+        $searchlists = Searchlist::where('gametitle_aliase_id', $gametitlealias->id)->get();
+        //dd($searchlists);
+        return view('gamelist', compact('searchlists', 'serachgamename'));
     }
 
     /**
