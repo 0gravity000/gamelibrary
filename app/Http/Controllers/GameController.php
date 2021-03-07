@@ -32,7 +32,7 @@ class GameController extends Controller
             $titles[$idx] = str_replace(array(" ", "  ", "　"), '+', $gametitlealiase->title);	//改行コード削除が必要？
             //api keyループ
             for ($apiidx=0; $apiidx < count($this->apikeys); $apiidx++) { 
-                $request_url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoCategoryId=20&maxResults=10&q='.$titles[$idx].'&key='.$this->apikeys[$apiidx];
+                $request_url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&order=rating&type=video&videoCategoryId=20&maxResults=10&q='.$titles[$idx].'&key='.$this->apikeys[$apiidx];
                 //dd($request_url);
                 $context = stream_context_create(array(
                   'http' => array('ignore_errors' => true)
@@ -107,12 +107,13 @@ class GameController extends Controller
         //api keyループ
         for ($apiidx=0; $apiidx < count($this->apikeys); $apiidx++) { 
             //Search: list
-            $request_url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoCategoryId=20&maxResults=50&q='.$title.'&key='.$this->apikeys[$apiidx];
+            $request_url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&order=rating&type=video&videoCategoryId=20&maxResults=50&q='.$title.'&key='.$this->apikeys[$apiidx];
             //dd($request_url);
             $context = stream_context_create(array(
             'http' => array('ignore_errors' => true)
             ));
             $res = file_get_contents($request_url, false, $context);
+            //dd(mb_detect_encoding($res));
             //dd($res);
             $respons = json_decode($res, false) ;
             //dd($respons);
@@ -126,6 +127,18 @@ class GameController extends Controller
         } else {
             //全api keyで検索してもエラー
             exit;
+        }
+
+        $kind = $respons->kind;
+        try {
+            $nextPageToken = $respons->nextPageToken;
+        } catch (\Exception $e) {
+            $nextPageToken = '';
+        }
+        try {
+            $prevPageToken = $respons->prevPageToken;
+        } catch (\Exception $e) {
+            $prevPageToken = '';
         }
         $gameitems = $respons->items;
         //dd($gameitems);

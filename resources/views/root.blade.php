@@ -26,8 +26,8 @@
                         <img src="{{ $item->snippet->thumbnails->medium->url }}" class="d-block w-100" alt="...">
                     </a>
                     <div class="card-body">
-                    <h5 class="card-title">{{ $item->snippet->title }}</h5>
-                    <p class="card-text">{{ $item->snippet->description }}</p>
+                    <h5 class="card-title">{!! html_entity_decode($item->snippet->title) !!}</h5>
+                    <p class="card-text">{!! html_entity_decode($item->snippet->description) !!}</p>
                     </div>
                </div>
                 @endforeach
