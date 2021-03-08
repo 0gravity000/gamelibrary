@@ -71,56 +71,65 @@ class GameController extends Controller
                 break;
             }
         }
+
+        $gametitlealias = GametitleAliase::where('title', $serachgamename)->first();
+
         if (array_key_exists('items', $respons)) {
+            //api keyで検索可能時（api keyの上限に達していない）
+            //searchlistテーブルに登録
+            //dd($respons);
+            $gameitems = $respons->items;
+            foreach ($gameitems as $gameitem) {
+                if (Searchlist::where('gametitle_aliase_id', $gametitlealias->id)
+                    ->where('videoid', $gameitem->id->videoId)->exists()) {
+                    $searchlist = Searchlist::where('gametitle_aliase_id', $gametitlealias->id)
+                    ->where('videoid', $gameitem->id->videoId)->first();
+                    //dd($searchlist);
+                } else {
+                    //新規追加
+                    $searchlist = new Searchlist;
+                }
+
+                $searchlist->videoid = $gameitem->id->videoId;
+                $searchlist->channelid = $gameitem->snippet->channelId;
+                $searchlist->channeltitle = $gameitem->snippet->channelTitle;
+                $searchlist->title = $gameitem->snippet->title;
+                $searchlist->description = $gameitem->snippet->description;
+                $searchlist->thumbnails_defaulturl = $gameitem->snippet->thumbnails->default->url;
+                $searchlist->thumbnails_mediumurl = $gameitem->snippet->thumbnails->medium->url;
+                $searchlist->thumbnails_highurl = $gameitem->snippet->thumbnails->high->url;
+                $searchlist->description = $gameitem->snippet->description;
+                $searchlist->publishtime = $gameitem->snippet->publishTime;
+                $searchlist->api_request_id = $apirequest->id;
+                $searchlist->kind = $respons->kind;
+                try {
+                    $searchlist->nextpagetoken = $respons->nextPageToken;
+                } catch (\Exception $e) {
+                    $searchlist->nextpagetoken = '';
+                }
+                try {
+                    $searchlist->prevpagetoken = $respons->prevPageToken;
+                } catch (\Exception $e) {
+                    $searchlist->prevpagetoken = '';
+                }
+                $searchlist->gametitle_aliase_id = $gametitlealias->id;
+                $searchlist->save();
+            }
+
         } else {
             //全api keyで検索してもエラー
-            $message="Sorry. Request exceeded limit. Please request tomorrow";
-            //dd($respons);
-            return view('welcome', compact('message'));
-        }
-
-        //searchlistテーブルに登録
-        //dd($respons);
-        $gameitems = $respons->items;
-        $gametitlealias = GametitleAliase::where('title', $serachgamename)->first();
-        foreach ($gameitems as $gameitem) {
-            if (Searchlist::where('gametitle_aliase_id', $gametitlealias->id)
-                ->where('videoid', $gameitem->id->videoId)->exists()) {
-                $searchlist = Searchlist::where('gametitle_aliase_id', $gametitlealias->id)
-                ->where('videoid', $gameitem->id->videoId)->first();
-                //dd($searchlist);
+            //DBに該当ゲームの登録ありの場合、DBの内容を表示
+            if (Searchlist::where('gametitle_aliase_id', $gametitlealias->id)->exists()) {
+                $searchlists = Searchlist::where('gametitle_aliase_id', $gametitlealias->id)->get();
             } else {
-                //新規追加
-                $searchlist = new Searchlist;
+               //DBに該当ゲームの登録なしの場合、エラーを表示
+                $message="Sorry. Request exceeded limit. Please request tomorrow";
+                //dd($respons);
+                //return redirect()->route('welcome', 'message');
+                return view('welcome', compact('message'));
             }
-
-            $searchlist->videoid = $gameitem->id->videoId;
-            $searchlist->channelid = $gameitem->snippet->channelId;
-            $searchlist->channeltitle = $gameitem->snippet->channelTitle;
-            $searchlist->title = $gameitem->snippet->title;
-            $searchlist->description = $gameitem->snippet->description;
-            $searchlist->thumbnails_defaulturl = $gameitem->snippet->thumbnails->default->url;
-            $searchlist->thumbnails_mediumurl = $gameitem->snippet->thumbnails->medium->url;
-            $searchlist->thumbnails_highurl = $gameitem->snippet->thumbnails->high->url;
-            $searchlist->description = $gameitem->snippet->description;
-            $searchlist->publishtime = $gameitem->snippet->publishTime;
-            $searchlist->api_request_id = $apirequest->id;
-            $searchlist->kind = $respons->kind;
-            try {
-                $searchlist->nextpagetoken = $respons->nextPageToken;
-            } catch (\Exception $e) {
-                $searchlist->nextpagetoken = '';
-            }
-            try {
-                $searchlist->prevpagetoken = $respons->prevPageToken;
-            } catch (\Exception $e) {
-                $searchlist->prevpagetoken = '';
-            }
-            $searchlist->gametitle_aliase_id = $gametitlealias->id;
-            $searchlist->save();
         }
 
-        $searchlists = Searchlist::where('gametitle_aliase_id', $gametitlealias->id)->get();
         //dd($searchlists);
         return view('gamelist', compact('searchlists', 'serachgamename'));
     }
