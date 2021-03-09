@@ -116,6 +116,8 @@ class GameController extends Controller
                 $searchlist->save();
             }
 
+            $searchlists = Searchlist::where('gametitle_aliase_id', $gametitlealias->id)->get();
+
         } else {
             //全api keyで検索してもエラー
             //DBに該当ゲームの登録ありの場合、DBの内容を表示
