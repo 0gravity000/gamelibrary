@@ -29,6 +29,7 @@ Route::get('/root', function () {
 });
 */
 Route::get('/game/{serachgamename}', 'GameController@index');
+Route::get('/game_mobile/{serachgamename}', 'GameController@index_mobile');
 Route::get('/game/{serachgamename}/{videoid}', 'GameController@show');
 Route::get('/admin', function () {
     return view('admin.admin');

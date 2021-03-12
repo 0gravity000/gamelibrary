@@ -11,4 +11,8 @@ class ApiRequest extends Model
     {
         return $this->hasMany('App\Seachlist');
     }
+    public function mobile_seachlists()
+    {
+        return $this->hasMany('App\MobileSeachlist');
+    }
 }

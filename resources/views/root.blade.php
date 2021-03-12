@@ -27,6 +27,14 @@
                 /
                 @endforeach
             </ul>
+            <ul>
+                <h4>■Android,iOS</h4>
+                @foreach ($mobiletitlealiases as $mobiletitlealias)
+                    <a href="/game_mobile/{{ $mobiletitlealias->title }}">{{ $mobiletitlealias->title }}</a>
+                /
+                @endforeach
+            </ul>
+
         </nav>
         </aside>
     </div>
