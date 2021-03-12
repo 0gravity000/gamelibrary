@@ -34,6 +34,7 @@ Route::get('/admin', function () {
     return view('admin.admin');
 });
 Route::get('/admin/download', 'AdminController@download');
+Route::get('/admin/download_androidgame', 'AdminController@download_androidgame');
 Route::get('/admin/platform', 'AdminController@platform');
 Route::get('/admin/platform/{id}', 'AdminController@show_platform');
 Route::post('/admin/platform', 'AdminController@update_platform');
