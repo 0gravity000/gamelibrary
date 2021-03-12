@@ -9,6 +9,7 @@ use App\Platform;
 use App\GametitleAliase;
 use App\Maker;
 use App\MobileGame;
+use App\MobiletitleAliase;
 
 class AdminController extends Controller
 {
@@ -82,7 +83,7 @@ class AdminController extends Controller
         return redirect('/admin');
     }
 
-    public function download_androidgame()
+    public function download_android()
     {
         //
         $client = new Client();
@@ -166,6 +167,13 @@ class AdminController extends Controller
         return view('gametitle', compact('games'));
     }
 
+    public function create_android()
+    {
+        //
+        $games = MobileGame::all();
+        return view('gametitle_android', compact('games'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -211,6 +219,16 @@ class AdminController extends Controller
  
         return view('game_update', compact('game'));
     }
+
+    public function show_game_android($id)
+    {
+        //
+        $game = MobileGame::where('id', $id)->first();
+        //dd($platform);
+ 
+        return view('game_update_android', compact('game'));
+    }
+
     public function show_gamealias($id)
     {
         //
@@ -218,6 +236,15 @@ class AdminController extends Controller
         //dd($gametitlealiase);
  
         return view('gamealias_update', compact('gametitlealiase'));
+    }
+
+    public function show_gamealias_android($id)
+    {
+        //
+        $gametitlealiase = MobiletitleAliase::where('id', $id)->first();
+        //dd($gametitlealiase);
+ 
+        return view('gamealias_update_android', compact('gametitlealiase'));
     }
 
     /**
@@ -229,10 +256,17 @@ class AdminController extends Controller
     public function edit()
     {
         //
-        //
         $gametitlealiases = GametitleAliase::all();
         //dd($gametitlealiases);
         return view('gametitlealias', compact('gametitlealiases'));
+    }
+
+    public function edit_android()
+    {
+        //
+        $gametitlealiases = MobiletitleAliase::all();
+        //dd($gametitlealiases);
+        return view('gametitlealias_android', compact('gametitlealiases'));
     }
 
     /**
@@ -268,6 +302,24 @@ class AdminController extends Controller
 
         return redirect('/admin/create');
     }
+
+    public function update_game_android(Request $request)
+    {
+        //
+        //dd($request);
+        //バリデーションチェック
+        $validatedData = $request->validate([
+            'InputTitle' => ['unique:mobiletitle_aliases,title']
+        ]);
+
+        $gametitlealiase = new MobiletitleAliase;
+        $gametitlealiase->title = $request->InputTitle;
+        $gametitlealiase->mobile_game_id = $request->InputId;
+        $gametitlealiase->save();
+
+        return redirect('/admin/create_android');
+    }
+
     public function update_gamealias(Request $request)
     {
         //
@@ -277,6 +329,17 @@ class AdminController extends Controller
         $gametitlealiase->save();
 
         return redirect('/admin/edit');
+    }
+
+    public function update_gamealias_android(Request $request)
+    {
+        //
+        $gametitlealiase = MobiletitleAliase::where('id', $request->InputId)->first();
+        //dd($gametitlealiase);
+        $gametitlealiase->title = $request->InputTitle;
+        $gametitlealiase->save();
+
+        return redirect('/admin/edit_android');
     }
 
     /**

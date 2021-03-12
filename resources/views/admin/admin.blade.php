@@ -11,7 +11,9 @@
             <a href="/admin/edit">ゲームタイトルの別名を編集</a><br>
             <a href="/admin/platform">プラットフォームを登録</a><br>
             <br>
-            <a href="/admin/download_androidgame">Androidゲームタイトルのダウンロード</a><br>
+            <a href="/admin/download_android">Androidゲームタイトルのダウンロード</a><br>
+            <a href="/admin/create_android">Androidゲームタイトルゲームタイトルから別名を登録</a><br>
+            <a href="/admin/edit_android">Androidゲームタイトルのゲームタイトルの別名を編集</a><br>
             <br>
             <a href="/admin/request">Google Youtube APIのリクエストを登録・編集</a>
         </div>
