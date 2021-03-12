@@ -18,11 +18,39 @@ class GameController extends Controller
         $this->apikeys = $tmp;
     }
 
-    public function random()
+    public function root()
     {
         $count = 10;
         $searchlists = Searchlist::inRandomOrder()->take($count)->get();
-        $gametitlealiases = GametitleAliase::all();
+        $gametitlealiases = GametitleAliase::inRandomOrder()->get();
+
+        return view('root', compact('searchlists', 'gametitlealiases'));
+    }
+    public function root_sort($sortid)
+    {
+        $count = 10;
+        $searchlists = Searchlist::inRandomOrder()->take($count)->get();
+        if ($sortid == '1') {
+            //タイトル昇順でソート
+            $gametitlealiases = GametitleAliase::orderBy('title')->get();
+        } elseif($sortid == '2') {
+            //タイトル降順でソート
+            $gametitlealiases = GametitleAliase::orderByDesc('title')->get();
+        } else {
+            $gametitlealiases = GametitleAliase::inRandomOrder()->get();
+        }
+
+        return view('root', compact('searchlists', 'gametitlealiases'));
+    }
+
+    public function root_filter(Request $request)
+    {
+        $count = 10;
+        $searchlists = Searchlist::inRandomOrder()->take($count)->get();
+
+        //タイトル昇順でソート
+        $gametitlealiases = GametitleAliase::where('title', 'like', "%$request->InputTitle%")->
+            orderBy('title')->get();
 
         return view('root', compact('searchlists', 'gametitlealiases'));
     }

@@ -20,7 +20,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/root', 'GameController@random');
+Route::get('/root', 'GameController@root');
+Route::get('/root/{sortid}', 'GameController@root_sort');
+Route::post('/root/filter', 'GameController@root_filter');
 /*
 Route::get('/root', function () {
     return view('root');

@@ -8,10 +8,23 @@
         <aside>
         <nav>
             <ul>
+                <h4>■TVゲーム</h4>
+                <h5>並び順：
+                    <a href="/root">おまかせ</a>&nbsp;/
+                    <a href="/root/1">タイトル 昇順</a>&nbsp;/
+                    <a href="/root/2">タイトル 降順</a>
+                </h5>
+                <h5>タイトル名で絞り込み：</h5>
+                <form method="POST" action="/root/filter">
+                    @csrf
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="InputTitle" value=""><br>
+                        <button type="submit" class="btn btn-primary">絞り込み</button>
+                    </div>
+                </form>
                 @foreach ($gametitlealiases as $gametitlealiase)
-                <li>
                     <a href="/game/{{ $gametitlealiase->title }}">{{ $gametitlealiase->title }}</a>
-                </li>
+                /
                 @endforeach
             </ul>
         </nav>
