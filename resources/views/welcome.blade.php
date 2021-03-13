@@ -4,109 +4,72 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>GameLibrary</title>
+        <title>{{ config('app.name') }}</title>
+
+        <!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script data-ad-client="ca-pub-6897468555074184" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
+        <link rel="dns-prefetch" href="//fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 10vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-
-        </style>
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="/css/gamelibrary.css" rel="stylesheet">
 
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
+        <!-- ナビバー -->
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/home') }}">Home</a>
+                    </li>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">Register</a>
+                        </li>
                         @endif
                     @endauth
                 </div>
             @endif
-        </div>
+            </li>
+        </ul>
 
         <div class="container">
-            <div class="content">
             <div class="row">
-                <div class="title m-b-md">
+                <div class="title mx-auto">
                     <a href="/root/1">GameLibrary</a>
                 </div>
             </div>
             <div class="row">
-                <div class="m-b-md">
+                <div class="mx-auto pb-4">
                     <a href="/root/1">人気ゲームの動画をチェック！！</a>
                 </div>
             </div>
-            </div>
+
             <div class="row">
                 <!-- リクエスト超過時のメッセージ -->
                 <h1>{{ $message ?? '' }}</h1>
             </div>
 
             <div class="row">
-                <div class="col-md-8">
-                <h1>ピックアップ！</h1>
-                    @foreach ($searchlists as $searchlist)
-                    <div class="card" style="width: 28rem;">
+                <div class="mx-auto">
+                    <h2>ピックアップ！</h2>
+                </div>
+            </div>
+            <div class="row">
+                @foreach ($searchlists as $searchlist)
+                <div class="col-md-4">
+                    <div class="card">
                         <h5 class="card-header">
                             {!! html_entity_decode($searchlist->gametitle_aliase->title) !!}
                         </h5>
@@ -118,11 +81,9 @@
                             <p class="card-text">{!! html_entity_decode($searchlist->description) !!}</p>
                         </div>
                    </div>
-                    @endforeach
                 </div>
+                @endforeach
             </div>
-        
-        </div>
         </div>
     </body>
 </html>

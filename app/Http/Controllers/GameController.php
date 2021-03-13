@@ -22,7 +22,7 @@ class GameController extends Controller
 
     public function welcome()
     {
-        $count = 10;
+        $count = 12;
         $searchlists = Searchlist::inRandomOrder()->take($count)->get();
         $gametitlealiases = GametitleAliase::inRandomOrder()->get();
         $typeid = 1;
