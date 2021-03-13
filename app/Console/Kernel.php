@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Events\DailyCheckGameTitle;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,6 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->call(function () {
+            event(new DailyCheckGameTitle());
+        })->dailyAt('01:00');
         // $schedule->command('inspire')->hourly();
     }
 
