@@ -13,24 +13,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', 'GameController@welcome');
+
+/*
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+*/
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/root', 'GameController@root');
-Route::get('/root/{sortid}', 'GameController@root_sort');
-Route::post('/root/filter', 'GameController@root_filter');
+Route::get('/root/{typeid}', 'GameController@root');
+Route::get('/root/{typeid}/{sortid}', 'GameController@root_sort');
+Route::post('/root/{typeid}/filter', 'GameController@root_filter');
 /*
 Route::get('/root', function () {
     return view('root');
 });
 */
-Route::get('/game/{serachgamename}', 'GameController@index');
-Route::get('/game_mobile/{serachgamename}', 'GameController@index_mobile');
-Route::get('/game/{serachgamename}/{videoid}', 'GameController@show');
+Route::get('/game/{typeid}/{serachgamename}', 'GameController@index');
+//Route::get('/game_mobile/{serachgamename}', 'GameController@index_mobile');
+Route::get('/game/{typeid}/{serachgamename}/{videoid}', 'GameController@show');
 Route::get('/admin', function () {
     return view('admin.admin');
 });

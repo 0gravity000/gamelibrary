@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <a href="/game/{{ $serachgamename }}">一覧へ戻る</a>
+            <a href="/game/{{$typeid}}/{{ $serachgamename }}">一覧へ戻る</a>
             <hr>
             <h1>{!! html_entity_decode($serachgamename) !!}&nbsp;の動画</h1><br>
             @foreach($videoitems as $item)
