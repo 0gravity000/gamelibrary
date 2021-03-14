@@ -163,14 +163,14 @@ class AdminController extends Controller
     public function create()
     {
         //
-        $games = Game::all();
+        $games = Game::orderByDesc('updated_at')->get();
         return view('gametitle', compact('games'));
     }
 
     public function create_android()
     {
         //
-        $games = MobileGame::all();
+        $games = MobileGame::orderByDesc('updated_at')->get();
         return view('gametitle_android', compact('games'));
     }
 
@@ -256,7 +256,7 @@ class AdminController extends Controller
     public function edit()
     {
         //
-        $gametitlealiases = GametitleAliase::all();
+        $gametitlealiases = GametitleAliase::orderByDesc('updated_at')->get();
         //dd($gametitlealiases);
         return view('gametitlealias', compact('gametitlealiases'));
     }
@@ -264,7 +264,7 @@ class AdminController extends Controller
     public function edit_android()
     {
         //
-        $gametitlealiases = MobiletitleAliase::all();
+        $gametitlealiases = MobiletitleAliase::orderByDesc('updated_at')->get();
         //dd($gametitlealiases);
         return view('gametitlealias_android', compact('gametitlealiases'));
     }
