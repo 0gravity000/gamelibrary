@@ -15,7 +15,8 @@
                     <label for="InputTitle" class="form-label">タイトル名</label>
                     <input type="text" class="form-control" name="InputTitle" value="{{ $gametitlealiase->title }}"><br>
                 </div>
-                <button type="submit" class="btn btn-primary">登録</button>
+                <button type="submit" class="btn btn-primary" name="regist">登録</button>
+                <button type="submit" class="btn btn-primary" name="delete">削除</button>
             </form>
         </div>
     </div>

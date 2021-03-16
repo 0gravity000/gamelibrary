@@ -12,8 +12,8 @@ class MobiletitleAliase extends Model
         return $this->belongsTo('App\MobileGame');
     }
 
-    public function mobile_seachlists()
+    public function mobile_searchlists()
     {
-        return $this->hasMany('App\MobileSeachlist');
+        return $this->hasMany('App\MobileSearchlist');
     }
 }

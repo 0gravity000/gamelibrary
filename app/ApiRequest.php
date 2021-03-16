@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class ApiRequest extends Model
 {
     //
-    public function seachlists()
+    public function searchlists()
     {
-        return $this->hasMany('App\Seachlist');
+        return $this->hasMany('App\Searchlist');
     }
-    public function mobile_seachlists()
+    public function mobile_searchlists()
     {
-        return $this->hasMany('App\MobileSeachlist');
+        return $this->hasMany('App\MobileSearchlist');
     }
 }

@@ -323,10 +323,25 @@ class AdminController extends Controller
     public function update_gamealias(Request $request)
     {
         //
+        //dd($request);
         $gametitlealiase = GametitleAliase::where('id', $request->InputId)->first();
-        //dd($gametitlealiase);
-        $gametitlealiase->title = $request->InputTitle;
-        $gametitlealiase->save();
+
+        if ($request->has('delete')) {
+            //削除
+            $searchlists = $gametitlealiase->searchlists;
+            //dd($searchlists);
+            if($searchlists != null){
+                foreach ($searchlists as $seachlist) {
+                    $seachlist->delete();
+                }
+            }
+            $gametitlealiase->delete();
+        } else {
+            //編集
+            //dd($gametitlealiase);
+            $gametitlealiase->title = $request->InputTitle;
+            $gametitlealiase->save();
+        }
 
         return redirect('/admin/edit');
     }
@@ -336,8 +351,22 @@ class AdminController extends Controller
         //
         $gametitlealiase = MobiletitleAliase::where('id', $request->InputId)->first();
         //dd($gametitlealiase);
-        $gametitlealiase->title = $request->InputTitle;
-        $gametitlealiase->save();
+        if ($request->has('delete')) {
+            //削除
+            $searchlists = $gametitlealiase->mobile_searchlists;
+            //dd($searchlists);
+            if($searchlists != null){
+                foreach ($searchlists as $seachlist) {
+                    $seachlist->delete();
+                }
+            }
+            $gametitlealiase->delete();
+        } else {
+            //編集
+            $gametitlealiase->title = $request->InputTitle;
+            $gametitlealiase->save();
+        }
+            
 
         return redirect('/admin/edit_android');
     }
