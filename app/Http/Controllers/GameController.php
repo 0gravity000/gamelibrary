@@ -128,7 +128,7 @@ class GameController extends Controller
             //dd($res);
             $respons = json_decode($res, false) ;
             //dd($respons);
-            if (array_key_exists('error', $respons)) {
+            if (property_exists($respons, 'error')) {
                 //エラー 次のapi keyループ
             } else {
                 break;
@@ -141,7 +141,7 @@ class GameController extends Controller
             $gametitlealias = MobiletitleAliase::where('title', $serachgamename)->first();
         }
 
-        if (array_key_exists('items', $respons)) {
+        if (property_exists($respons, 'items')) {
             //api keyで検索可能時（api keyの上限に達していない）
             //searchlistテーブルに登録
             //dd($respons);
@@ -280,13 +280,13 @@ class GameController extends Controller
             //dd($res);
             $respons = json_decode($res, false) ;
             //dd($respons);
-            if (array_key_exists('error', $respons)) {
+            if (property_exists($respons, 'error')) {
                 //エラー 次のapi keyループ
             } else {
                 break;
             }
         }
-        if (array_key_exists('items', $respons)) {
+        if (property_exists($respons, 'items')) {
         } else {
             //全api keyで検索してもエラー
             exit;
